@@ -1,0 +1,24 @@
+MODEL:
+  NAME: 'focusclip'  # clip
+  IMAGE_SIZE:
+  - 224
+  - 224
+  KWARGS:
+    visual_encoder_name: 'vit_base_patch16_224'
+    text_encoder_name: 'bert-base-uncased'
+    tokenizer_name: 'bert-base-uncased'
+    context_length: 512
+    embed_dim: 512
+    triple_components: false  # false means using two components (visual and text like CLIP)
+    pretrained: true
+LOSS:
+  NAME: 'ntxent'
+  KWARGS:
+    temperature: 0.5
+    learn_temperature: false
+TRAIN:
+  LR: 0.0005
+  BATCH_SIZE: 32
+  MAX_EPOCHS: 64
+  OPTIMIZER: 'sgd'
+  MOMENTUM: 0.9
