@@ -3,10 +3,10 @@ import os
 from torchvision.datasets import FER2013 as TorchFER2013
 
 
-class FER(TorchFER2013):
+class FER2013Dataset(TorchFER2013):
     """ The Facial Emotion Recognition (FER) 2013 dataset. """
 
-    def __init__(self, root='data/fer2013', split='train', transform=None):
+    def __init__(self, root='data/eval/fer2013', split='train', transform=None):
         super().__init__(root, split, transform)
         self.root = os.path.join(root, split)
         self.transform = transform

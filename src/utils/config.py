@@ -10,7 +10,7 @@ __C.WORKERS = 8
 
 # Common parameters for the network
 __C.MODEL = edict()
-__C.MODEL.NAME = 'clip3'
+__C.MODEL.NAME = 'focusclip'
 __C.MODEL.KWARGS = {
     'visual_encoder_name': 'vit_base_patch16_224',
     'text_encoder_name': 'bert-base-uncased',

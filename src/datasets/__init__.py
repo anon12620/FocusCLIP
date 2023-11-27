@@ -1,34 +1,27 @@
-from .actions import get_dataset as get_actions_dataset
-from .emotic import EmoticDataset
-from .fer import FER
-from .ferplus import FERPlus
-from .keypoints import get_dataset as get_keypoints_dataset
-from .multimodal_mpii import MultiModalMPII
-from .face import FairFace, UTKFace, LAGENDA
-from .kinetics import KineticsDataset
+from .evaluation import *
+from .training import *
 
-__all__ = ['get_dataset', 'get_actions_dataset', 'get_keypoints_dataset']
+__all__ = ['get_dataset']
 
 available_datasets = {
-    'keypoints/mpii': get_keypoints_dataset,
-    'action/stanford40': get_actions_dataset,
+    # Training datasets
+    'multimodal_mpii': MultimodalMPIIDataset,
+
+    # Evaluation datasets
     'emotic': EmoticDataset,
-    'fer': FER,
-    'ferplus': FERPlus,
-    'multimodal_mpii': MultiModalMPII,
-    'fairface': FairFace,
-    'utk': UTKFace,
-    'lagenda': LAGENDA,
+    'fairface': FairFaceDataset,
+    'fer2013': FER2013Dataset,
+    'ferplus': FERPlusDataset,
     'kinetics': KineticsDataset,
+    'lagenda': LAGENDADataset,
+    'stanford40': Stanford40Dataset,
+    'utkface': UTKFaceDataset,
 }
 
 
 def get_dataset(dataset, **kwargs):
+    """ Factory function for creating datasets. """
     if dataset not in available_datasets:
         raise ValueError(f'Dataset {dataset} is not supported')
-
-    if dataset.count('/') == 1:
-        dataset_name = dataset.split('/')[1]
-        return available_datasets[dataset](dataset_name, **kwargs)
 
     return available_datasets[dataset](**kwargs)

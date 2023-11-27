@@ -9,7 +9,7 @@ from torch.utils.data import Dataset
 class Stanford40Dataset(Dataset):
     ALLOWED_SPLITS = ['train', 'test']
 
-    def __init__(self, root='data/stanford40', split='train', transform=None):
+    def __init__(self, root='data/eval/stanford_actions', split='train', transform=None):
         super().__init__()
         if split not in self.ALLOWED_SPLITS:
             raise ValueError(f"Invalid split: {split}")

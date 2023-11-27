@@ -2,12 +2,12 @@ import os
 import json
 
 
-from .base import BaseDataset
+from ._base import BaseDataset
 
 
 class KineticsDataset(BaseDataset):
 
-    def __init__(self, root, split='train', **kwargs):
+    def __init__(self, root='data/eval/kinetcis400', split='train', **kwargs):
         assert split in ['train', 'val', 'test'], f"Invalid split: {split}"
         super().__init__(root, split, **kwargs)
 

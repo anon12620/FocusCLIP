@@ -30,7 +30,9 @@ def load_dataset(captions_dir, config_name, split='train'):
     return data
 
 
-class MultiModalMPII(Dataset):
+class MultimodalMPIIDataset(Dataset):
+    """ A multimodal version of the MPII Human Pose dataset with heatmaps and pose descriptions. """
+
     def __init__(self, root='data/mpii', config_name='gpt3.5-turbo-legacy',
                  split='train', transforms=None):
         self.root = root
@@ -95,6 +97,27 @@ class MultiModalMPII(Dataset):
 
         # Load the captions
         captions = self.captions[idx]
+
+        # # Perform data augmentation
+        # # This is used when using multiple captions per image. In this case, we pair the
+        # # whole image and mask with the first (primary) caption, and perform random affine
+        # # transforms on images and masks to pair with the remaining captions.
+        # images, masks = [image.copy()], [mask.copy()]
+        # for _ in range(len(captions) - 1):
+        #     angle = random.uniform(-10, 10)
+        #     translate = (random.uniform(-5, 5), random.uniform(-5, 5))
+        #     scale = random.uniform(0.9, 1.1)
+        #     shear = random.uniform(-10, 10)
+        #     images.append(TF.affine(image.copy(),
+        #                             angle=angle,
+        #                             translate=translate,
+        #                             scale=scale,
+        #                             shear=shear))
+        #     masks.append(TF.affine(mask.copy(),
+        #                            angle=angle,
+        #                            translate=translate,
+        #                            scale=scale,
+        #                            shear=shear))
 
         if self.transforms is not None:
             image = self.transforms(image)

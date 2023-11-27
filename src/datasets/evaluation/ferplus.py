@@ -7,7 +7,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 
 
-class FERPlus(Dataset):
+class FERPlusDataset(Dataset):
     """ The FER+ dataset [1] is an extension of the FER2013 dataset [2] with improved annotations.
 
     References:
@@ -15,7 +15,7 @@ class FERPlus(Dataset):
         [2] https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data
     """
 
-    def __init__(self, root='data/emotion-recognition/ferplus', split='train',
+    def __init__(self, root='data/eval/ferplus', split='train',
                  transform: Optional[Callable] = None, target_transform: Optional[Callable] = None):
         assert split in ['train', 'val', 'test']
         self.root = root
@@ -38,8 +38,16 @@ class FERPlus(Dataset):
         # Convert dataframe to dictionary
         self.annotations = self.annotations.to_dict(orient='records')
 
-    def __len__(self):
-        return len(self.annotations)
+        # Define the candidate captions
+        self.captions_emotion = [self._map_emotion(emotion) for emotion in self.emotion_adjectives]
+        self.num_emotions = len(self.emotion_names)
+
+    def _map_emotion(self, emotion):
+        assert emotion in self.emotion_adjectives
+        article = 'a'
+        if emotion[0].lower() in ['a', 'e', 'i', 'o', 'u']:
+            article = 'an'
+        return f'a photo of {article} {emotion} looking face'
 
     def __getitem__(self, idx):
         annotation = self.annotations[idx]
@@ -67,21 +75,5 @@ class FERPlus(Dataset):
             # 'emotion_probs': emotion_probs,
         }
 
-    def make_prompt(self, emotion):
-        assert emotion in self.emotion_adjectives
-        article = 'a'
-        if emotion[0].lower() in ['a', 'e', 'i', 'o', 'u']:
-            article = 'an'
-        return f'a photo of {article} {emotion} looking face'
-    
-    @property
-    def prompts(self):
-        return [self.make_prompt(emotion) for emotion in self.emotion_adjectives]
-
-    @property
-    def num_emotions(self):
-        return len(self.emotion_names)
-    
-    @property
-    def captions_emotion(self):
-        return self.prompts
+    def __len__(self):
+        return len(self.annotations)
